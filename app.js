@@ -6,7 +6,13 @@ const mongoose = require('mongoose');
 const fastify = require('fastify')({ logger: false });
 const routes = require('./routes');
 const util = require('./utils/util');
+
 require('dotenv').config();
+
+// Basic Auth
+
+let validate = (username, password, req, res, done) => util.auth(username, password, process.env.USR, process.env.PWD, done);
+fastify.register(require('fastify-basic-auth'), { validate, realm: 'ContactBookSample' });
 
 // DB Connection
 
@@ -26,14 +32,19 @@ routes.forEach((route) => {
 });
 
 // Middleware 
-fastify.addHook('preHandler', (req, res, done) => {
 
-    if (req.body) req.body = util.sanitize(req.body);
+fastify.after(() => {
+    fastify.addHook('preHandler', fastify.basicAuth);
 
-    if (req.params) req.params = util.sanitize(req.params);
- 
-    done();
-})
+    fastify.addHook('preHandler', (req, res, done) => {
+
+        if (req.body) req.body = util.sanitize(req.body);
+    
+        if (req.params) req.params = util.sanitize(req.params);
+     
+        done();
+    })
+});
 
 const start = async() => {
 
