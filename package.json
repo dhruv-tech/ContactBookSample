@@ -1,0 +1,26 @@
+{
+  "name": "contact-book",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhruv-tech/ContactBookSample.git"
+  },
+  "author": "Dhruv",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dhruv-tech/ContactBookSample/issues"
+  },
+  "homepage": "https://github.com/dhruv-tech/ContactBookSample#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "fastify": "^3.16.2",
+    "mongoose": "^5.12.12",
+    "nodemon": "^2.0.7"
+  }
+}
