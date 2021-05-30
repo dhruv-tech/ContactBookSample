@@ -19,7 +19,7 @@ const routes = [
     },
     {
         method: 'GET',
-        url: '/v1/contacts/:query/:page',
+        url: '/v1/contacts/:page/:query',
         handler: contactController.search
     }
 ]

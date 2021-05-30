@@ -1,10 +1,11 @@
 const Contact = require('../models/Contact');
-
+const util = require('../utils/util');
 const contactController = {};
 
 contactController.add = async(req, res) => {
     try {
-
+        
+        if (req.body.email && !util.validateEmail(req.body.email)) throw new Error('invalid email');
         const contact = new Contact({firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email});
         await contact.save();
 
@@ -12,12 +13,15 @@ contactController.add = async(req, res) => {
         res.send();
 
     } catch (error) {
-        if (error.code == '11000') {
+        if (error.message == 'invalid email') {
+            res.code(400);
+            res.send({error: true, msg: "Email is not valid"});
+        } else if (error.code == '11000') {
             res.code(406);
             res.send({error: true, msg: "Specified email id is already associated with contact"});
         } else if (error._message == 'Contact validation failed') {
             res.code(400);
-            res.send({error: true, msg: "Insufficent/invalid information provided"});
+            res.send({error: true, msg: "Insufficent information provided"});
         } else {
             res.code(500);
             res.send({error: true, msg: "Could not save contact, please try again later."});
@@ -56,7 +60,7 @@ contactController.delete = async(req, res) => {
 contactController.update = async(req, res) => {
     try {
         
-        let updated = await Contact.findOneAndUpdate({email: req.params.email}, req.body);
+        let updated = await Contact.findOneAndUpdate({email: req.params.email.toLowerCase()}, req.body);
 
         if (updated == null) {
             throw new Error('not found');
@@ -82,21 +86,42 @@ contactController.search = async(req, res) => {
     try {
         
         const fields = 'firstName lastName email';
-        const query = new RegExp(`^${req.params.query}`);
-        const skip = -10 + 10*req.params.page;
-        let results = await Contact.find({$or: [
-            {firstName: {$regex: query, $options: 'i' }},
-            {lastName: {$regex: query, $options: 'i' }},
-            {email: {$regex: query, $options: 'i' }}
-        ]}, fields, {skip: skip, limit: 10});
+        const skip = -10 + (10 * req.params.page);
+        let results = [];
+
+        if (skip < 0 || !(parseInt(req.params.page) == req.params.page)) throw new Error('out of range');
+
+        if (req.params.query.indexOf(' ') == -1) {
+
+            const query = new RegExp(`^${req.params.query}`);
+
+            results = await Contact.find({$or: [
+                {firstName: {$regex: query, $options: 'i' }},
+                {lastName: {$regex: query, $options: 'i' }},
+                {email: {$regex: query, $options: 'i' }}
+            ]}, fields, {skip: skip, limit: 10});
+
+        } else {
+            const queryRaw = req.params.query;
+            results = await Contact.find({$and: [
+                {firstName: {$regex: `^${queryRaw.substr(0,queryRaw.indexOf(' '))}`, $options: 'i' }},
+                {lastName: {$regex: `^${queryRaw.substr(queryRaw.indexOf(' ')+1)}`, $options: 'i' }}
+            ]}, fields, {skip: skip, limit: 10});
+
+        }
 
         res.code(200);
         res.send(results);
 
     } catch (error) {
-        
-        res.code(500);
-        res.send({error: true, msg: "Unable to search, please try again later."});
+
+        if (error.message = 'out of range') {
+            res.code(400);
+            res.send({error: true, msg: "Invalid page number"});
+        } else {
+            res.code(500);
+            res.send({error: true, msg: "Unable to search, please try again later."});
+        }
         
     }
 };
