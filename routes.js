@@ -4,22 +4,22 @@ const routes = [
 
     {
         method: 'POST',
-        url: '/contact',
+        url: '/v1/contacts',
         handler: contactController.add
     },
     {
         method: 'DELETE',
-        url: '/contact/:email',
+        url: '/v1/contacts/:email',
         handler: contactController.delete
     },
     {
         method: 'PUT',
-        url: '/contact/:email',
+        url: '/v1/contacts/:email',
         handler: contactController.update
     },
     {
         method: 'GET',
-        url: '/contact/:query',
+        url: '/v1/contacts/:query/:page',
         handler: contactController.search
     }
 ]

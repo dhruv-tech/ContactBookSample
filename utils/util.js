@@ -6,13 +6,20 @@ utils.sanitize = (data) => {
     return sanitize.primitives(data);
 }
 
-utils.auth = async(user, pass, actualUser, actualPass, done) => {
+utils.auth = async(credentials, actualUser, actualPass) => {
 
-    if (user === actualUser && pass === actualPass) {
-        done()
-    } else {
-        done(new Error('Incorrect username/password'));
-    }
+    return new Promise((resolve, reject) => {
+        try {
+
+            if (credentials.name === actualUser && credentials.pass === actualPass) {
+                resolve();
+            } else {
+                throw new Error();
+            }
+        } catch (error) {
+            reject(new Error('Incorrect username/password'));
+        }
+    });
 }
 
 module.exports = utils;
