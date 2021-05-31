@@ -25,9 +25,9 @@ describe('UNIVERSAL: Basic Auth',  async() => {
 
         return request(app.server).post('/v1/contacts').send({})
         .set('Content-Type', 'application/json')
-        .auth('admin', 'admin')
+        .auth(process.env.USR, process.env.PSWD)
         .then((res) => {
-            expect(res.statusCode).to.not.equal('401');
+            expect(res.statusCode).to.not.equal(401);
         });
 
     });
@@ -52,7 +52,7 @@ describe('POST: /v1/contacts',  async() => {
             "lastName": "1",
             "email": "person1@human.life"
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(201);
 
     });
@@ -64,7 +64,7 @@ describe('POST: /v1/contacts',  async() => {
             "lastName": "1",
             "email": "personone@human.life"
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(201);
 
     });
@@ -76,7 +76,7 @@ describe('POST: /v1/contacts',  async() => {
             "lastName": "1",
             "email": "person.one@human.life"
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(201);
 
     });
@@ -88,7 +88,7 @@ describe('POST: /v1/contacts',  async() => {
             "lastName": "One",
             "email": "persOn1@human.life"
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(406);
 
     });
@@ -100,7 +100,7 @@ describe('POST: /v1/contacts',  async() => {
             "lastName": "One",
             "email": "person1human.life"
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(400);
 
     });
@@ -111,7 +111,7 @@ describe('POST: /v1/contacts',  async() => {
             "firstName": "People",
             "email": "person1@human.life"
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(400);
 
     });
@@ -123,7 +123,7 @@ describe('POST: /v1/contacts',  async() => {
             "lastName": "One",
             "email": null
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(400);
 
     });
@@ -138,7 +138,7 @@ describe('PUT: /v1/contacts/:email',  async() => {
             "lastName": "One",
             "email": "person1@human.life"
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(204);
 
     });
@@ -150,7 +150,7 @@ describe('PUT: /v1/contacts/:email',  async() => {
             "lastName": "One",
             "email": "personone@human.life"
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(406);
 
     });
@@ -162,7 +162,7 @@ describe('PUT: /v1/contacts/:email',  async() => {
             "lastName": "One",
             "email": "PERSON1@human.LIFE"
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(406);
 
     });
@@ -174,7 +174,7 @@ describe('PUT: /v1/contacts/:email',  async() => {
             "lastName": "One",
             "email": "person1@human"
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(400);
 
     });
@@ -186,7 +186,7 @@ describe('PUT: /v1/contacts/:email',  async() => {
             "lastName": "One",
             "email": "person1@human.xyz"
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(404);
 
     });
@@ -198,7 +198,7 @@ describe('PUT: /v1/contacts/:email',  async() => {
             "lastName": "One",
             "email": "person1@human"
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(400);
 
     });
@@ -210,7 +210,7 @@ describe('PUT: /v1/contacts/:email',  async() => {
             "lastName": "One",
             "email": null
         }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(400);
 
     });
@@ -222,7 +222,7 @@ describe('GET: /v1/contacts/:page/:query',  async() => {
     it ('Contains valid request - all contacts', () => {
         return request(app.server).get('/v1/contacts/1/').send()
         .set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .then((res) => {
             expect(res.body.length).to.equal(3);
         })
@@ -232,7 +232,7 @@ describe('GET: /v1/contacts/:page/:query',  async() => {
     it ('Contains valid request - search by email', () => {
         return request(app.server).get('/v1/contacts/1/person1@human.life').send()
         .set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .then((res) => {
             expect(res.body.length).to.equal(1);
             expect(res.body[0].email).to.equal('person1@human.life');
@@ -243,7 +243,7 @@ describe('GET: /v1/contacts/:page/:query',  async() => {
     it ('Contains valid request - search by first name (mixed-case)', () => {
         return request(app.server).get('/v1/contacts/1/PersoN').send()
         .set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .then((res) => {
             expect(res.body.length).to.equal(3);
             expect(res.body[0].firstName).to.equal('Person');
@@ -256,7 +256,7 @@ describe('GET: /v1/contacts/:page/:query',  async() => {
     it ('Contains valid request - search by last name (mixed-case)', () => {
         return request(app.server).get('/v1/contacts/1/oNe').send()
         .set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .then((res) => {
             expect(res.body.length).to.equal(1);
             expect(res.body[0].lastName).to.equal('One');
@@ -267,7 +267,7 @@ describe('GET: /v1/contacts/:page/:query',  async() => {
     it ('Contains valid request - search by full name (mixed-case)', () => {
         return request(app.server).get('/v1/contacts/1/PersoN oNe').send()
         .set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .then((res) => {
             expect(res.body.length).to.equal(1);
             expect(res.body[0].firstName).to.equal('Person');
@@ -279,7 +279,7 @@ describe('GET: /v1/contacts/:page/:query',  async() => {
     it ('Contains inavlid page number (<1)', () => {
         return request(app.server).get('/v1/contacts/0/').send()
         .set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(400);
     
     });
@@ -287,7 +287,7 @@ describe('GET: /v1/contacts/:page/:query',  async() => {
     it ('Contains invalid page number (string)', () => {
         return request(app.server).get('/v1/contacts/all/').send()
         .set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(400);
     
     });
@@ -295,7 +295,7 @@ describe('GET: /v1/contacts/:page/:query',  async() => {
     it ('Contains valid request - empty page', () => {
         return request(app.server).get('/v1/contacts/2/').send()
         .set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .then((res) => {
             expect(res.body.length).to.equal(0);
         })
@@ -312,14 +312,14 @@ describe('GET: /v1/contacts/:page/:query',  async() => {
                     "lastName": `${count}`,
                     "email": `human${count}@person.life`
                 }).set('Content-Type', 'application/json')
-                .auth(process.env.USR, process.env.PWD);
+                .auth(process.env.USR, process.env.PSWD);
 
                 count++;
             }
 
             request(app.server).get('/v1/contacts/1/human').send()
             .set('Content-Type', 'application/json')
-            .auth(process.env.USR, process.env.PWD)
+            .auth(process.env.USR, process.env.PSWD)
             .then((res) => {
                 expect(res.body.length).to.equal(10);
                 resolve();
@@ -332,7 +332,7 @@ describe('GET: /v1/contacts/:page/:query',  async() => {
 
         return request(app.server).get('/v1/contacts/2/human').send()
         .set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .then((res) => {
             expect(res.body.length).to.equal(2);
         })
@@ -346,21 +346,21 @@ describe('DELETE: /v1/contacts/:page/:email',  async() => {
     it ('Contains valid request', () => {
         return request(app.server).delete('/v1/contacts/person1@human.life').send()
         .set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(204);
     });
 
     it ('Contains non-existent email', () => {
         return request(app.server).delete('/v1/contacts/person1@human.com').send()
         .set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(404);
     });
 
     it ('Contains no email', () => {
         return request(app.server).delete('/v1/contacts/').send()
         .set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PWD)
+        .auth(process.env.USR, process.env.PSWD)
         .expect(404);
     });
 
@@ -373,12 +373,12 @@ describe('CHECKSUM',  async() => {
             let sum = 0;
             request(app.server).get('/v1/contacts/1/').send()
             .set('Content-Type', 'application/json')
-            .auth(process.env.USR, process.env.PWD).then((res1) => {
+            .auth(process.env.USR, process.env.PSWD).then((res1) => {
                 sum += res1.body.length;
 
                 request(app.server).get('/v1/contacts/2/').send()
                 .set('Content-Type', 'application/json')
-                .auth(process.env.USR, process.env.PWD).then((res2) => {
+                .auth(process.env.USR, process.env.PSWD).then((res2) => {
                     sum += res2.body.length;
                     expect(sum).to.equal(14);
                     resolve();
