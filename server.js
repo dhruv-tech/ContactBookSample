@@ -23,7 +23,7 @@ mongoose.connect(process.env.DB_URI, {autoIndex: true, keepAlive: true}).then(()
 const start = async() => {
 
     try {
-      await fastify.listen(process.env.PORT || 3000);
+      await fastify.listen(process.env.PORT || 3000, process.env.HOST);
       console.log(`\x1b[36m%s\x1b[36m`, `Application listening on ${fastify.server.address().port}`);
     } catch (err) {
       fastify.log.error(err);
