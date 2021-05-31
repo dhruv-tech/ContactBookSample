@@ -12,7 +12,8 @@ const mongoose = require('mongoose');
 const Mockgoose = require('mockgoose').Mockgoose;
 const mockgoose = new Mockgoose(mongoose);
 
-before(async() => {
+before(async function () {
+    this.timeout(5000);
     await app.ready();
     await mockgoose.prepareStorage();
     await mongoose.connect(process.env.DB_URI, { useNewUrlParser: true });
@@ -390,7 +391,7 @@ describe('CHECKSUM',  async() => {
 
 });
 
-after(() => {
+after(function () {
     app.close()
     mongoose.connection.close()
 });
