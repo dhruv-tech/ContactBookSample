@@ -17,11 +17,7 @@ const build = (opts={}) => {
     
         try {
             const credentials = auth(req);
-            console.log(credentials);
-            console.log(process.env.USR);
-
-            console.log(process.env.PWD);
-            await util.auth(credentials, process.env.USR, process.env.PWD);
+            await util.auth(credentials, process.env.USR, process.env.PSWD);
         } catch (error) {
             console.log(error);
             res.code(401);
