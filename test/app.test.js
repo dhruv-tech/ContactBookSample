@@ -118,7 +118,7 @@ describe('POST: /v1/contacts',  async() => {
 
     it ('Contains null email id', () => {
 
-        return request(app.server).put('/v1/contacts/person10@human.life').send({
+        return request(app.server).post('/v1/contacts').send({
             "firstName": "People",
             "lastName": "One",
             "email": null
@@ -197,18 +197,6 @@ describe('PUT: /v1/contacts/:email',  async() => {
             "firstName": "People",
             "lastName": "One",
             "email": "person1@human"
-        }).set('Content-Type', 'application/json')
-        .auth(process.env.USR, process.env.PSWD)
-        .expect(400);
-
-    });
-
-    it ('Contains null email id in body', () => {
-
-        return request(app.server).put('/v1/contacts/person10@human.life').send({
-            "firstName": "People",
-            "lastName": "One",
-            "email": null
         }).set('Content-Type', 'application/json')
         .auth(process.env.USR, process.env.PSWD)
         .expect(400);

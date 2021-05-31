@@ -59,9 +59,12 @@ contactController.delete = async(req, res) => {
 
 contactController.update = async(req, res) => {
     try {
-
-        if (req.body.email && !util.validateEmail(req.body.email)) throw new Error('invalid email');
-        else if (req.body.email == null) throw new Error('invalid email');
+        
+        if (req.body.hasOwnProperty('email')) { 
+            if (req.body.email && !util.validateEmail(req.body.email)) {
+                throw new Error('invalid email');
+            }
+        }
 
         let updated = await Contact.findOneAndUpdate({email: req.params.email.toLowerCase()}, req.body);
 
