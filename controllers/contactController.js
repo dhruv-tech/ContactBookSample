@@ -18,7 +18,7 @@ contactController.add = async(req, res) => {
             res.send({error: true, msg: "Email is not valid"});
         } else if (error.code == '11000') {
             res.code(406);
-            res.send({error: true, msg: "Specified email id is already associated with contact"});
+            res.send({error: true, msg: "Specified email id is already associated with another contact"});
         } else if (error._message == 'Contact validation failed') {
             res.code(400);
             res.send({error: true, msg: "Insufficent information provided"});
@@ -60,6 +60,9 @@ contactController.delete = async(req, res) => {
 contactController.update = async(req, res) => {
     try {
         
+        if (req.body.email == null) throw new Error('invalid email');
+        else if (!util.validateEmail(req.body.email)) throw new Error('invalid email');
+
         let updated = await Contact.findOneAndUpdate({email: req.params.email.toLowerCase()}, req.body);
 
         if (updated == null) {
@@ -71,9 +74,15 @@ contactController.update = async(req, res) => {
 
     } catch (error) {
         
-        if (error.message == "not found") {
+        if (error.message == 'invalid email') {
+            res.code(400);
+            res.send({error: true, msg: "Email is not valid"});
+        } else if (error.message == "not found") {
             res.code(404);
             res.send({error: true, msg: "Contact does not exist"});
+        } else if (error.code == '11000') {
+            res.code(406);
+            res.send({error: true, msg: "Specified email id is already associated with contact"});
         } else {
             res.code(500);
             res.send({error: true, msg: "Could not update contact, please try again later."});

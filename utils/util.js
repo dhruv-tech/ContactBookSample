@@ -23,7 +23,6 @@ utils.auth = async(credentials, actualUser, actualPass) => {
 }
 
 utils.validateEmail = (email) => {
-    console.log(email);
     return (email != '' && email.match(/^[a-zA-Z0-9_.+]+(?<!^[0-9]*)@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/));
 }
 
